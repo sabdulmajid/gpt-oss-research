@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: medium
+entrypoint: batch_matrix_trace
+task_id: tensor_contraction_1
+timeout_sec: 30
+topic: pytorch_tensor_ops

@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: easy
+entrypoint: tokens_per_second
+task_id: tokens_per_second
+timeout_sec: 30
+topic: performance

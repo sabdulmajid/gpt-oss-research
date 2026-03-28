@@ -1,0 +1,44 @@
+experiment_name: gpt_oss_20b_sft_benchmark_v1
+model:
+  name_or_path: /pub7/neel2/hf-cache/gpt-oss-20b
+  teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+model_load:
+  quantization: mxfp4
+  dequantize: true
+  attn_implementation: eager
+  torch_dtype: bfloat16
+  use_cache: false
+  device_map: auto
+adapter:
+  type: lora
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.0
+  target_modules: all-linear
+  expert_targeting:
+    enabled: true
+    layer_indices: [7, 15, 23]
+    parameter_templates:
+      - "{layer}.mlp.experts.gate_up_proj"
+      - "{layer}.mlp.experts.down_proj"
+data:
+  manifest_path: data/manifests/sft_starting_mix.manifest.json
+  materialized_dataset_path: /pub7/neel2/gpt-oss-research/artifacts/materialized/sft_benchmark_v1/train.jsonl
+output:
+  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/sft/gpt_oss_20b_sft_benchmark_v1
+  report_dir: /pub7/neel2/gpt-oss-research/reports/experiments
+training:
+  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/sft/gpt_oss_20b_sft_benchmark_v1
+  seed: 1337
+  learning_rate: 2.0e-4
+  gradient_checkpointing: true
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 8
+  max_steps: 400
+  logging_steps: 1
+  save_steps: 100
+  max_length: 3072
+  warmup_ratio: 0.03
+  lr_scheduler_type: cosine
+  bf16: true
+  report_to: none

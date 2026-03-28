@@ -9,6 +9,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, Mxfp4Config
 
 from .internal_eval import discover_tasks, evaluate_solution
 from .io import write_json
+from .reporting import current_git_sha, utc_now_iso
 
 
 def _extract_code(text: str) -> str:
@@ -72,20 +73,37 @@ def run_model_eval(
         candidate_path = candidates_dir / f"{task.task_id}.py"
         candidate_path.write_text(code, encoding="utf-8")
         eval_result = evaluate_solution(task, candidate_path)
+        eval_result["benchmark_bucket"] = task.benchmark_bucket
+        eval_result["difficulty"] = task.difficulty
+        eval_result["topic"] = task.topic
         eval_result["raw_generation"] = generated_text
         results.append(eval_result)
 
     passed = sum(1 for result in results if result["passed"])
+    bucket_summary: dict[str, dict[str, int]] = {}
+    for task, result in zip(tasks, results):
+        summary = bucket_summary.setdefault(task.benchmark_bucket, {"total": 0, "passed": 0, "failed": 0})
+        summary["total"] += 1
+        if result["passed"]:
+            summary["passed"] += 1
+        else:
+            summary["failed"] += 1
     report = {
+        "generated_at_utc": utc_now_iso(),
+        "git_sha": current_git_sha(),
         "model_path": model_path,
         "adapter_path": adapter_path,
+        "decoding": {
+            "max_new_tokens": max_new_tokens,
+            "do_sample": False,
+        },
         "task_count": len(results),
         "passed": passed,
         "failed": len(results) - passed,
         "pass_rate": passed / len(results),
+        "bucket_summary": bucket_summary,
         "results": results,
         "candidates_dir": str(candidates_dir),
     }
     write_json(output_path, report)
     return report
-

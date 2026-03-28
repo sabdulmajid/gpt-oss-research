@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: easy
+entrypoint: train_one_step
+task_id: training_loop_basic
+timeout_sec: 30
+topic: model_training_loops

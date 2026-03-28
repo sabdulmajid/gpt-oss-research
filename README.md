@@ -1,108 +1,88 @@
 # gpt-oss Research
 
-This repository is building a `gpt-oss` model that is genuinely useful for ML research and PyTorch-heavy coding. The target is not generic coding uplift. The target is better performance on:
+This repository builds and measures a `gpt-oss` model specialized for ML research and PyTorch-heavy coding. The target is not generic coding uplift. The target is stronger performance on:
 
 - PyTorch implementation
-- debugging of training loops, autograd, data pipelines, mixed precision, and distributed training
+- debugging of training loops, autograd, mixed precision, distributed training, and data pipelines
 - ML systems reasoning
 - executable code correctness
 
-`AGENTS.md` is the operating contract for the project. It defines the research direction, hardware constraints, dataset policy, benchmark rules, and anti-leakage requirements.
+`AGENTS.md` is the operating contract for the project. It defines the hardware reality, data policy, benchmark rules, anti-leakage requirements, and the SFT-first research direction.
 
-## Project Strategy
+## Research Direction
 
-The current strategy is intentionally conservative.
+The project follows the strategy in `AGENTS.md`.
 
 - Primary trainable model: `gpt-oss-20b`
 - Primary teacher/reference model: `gpt-oss-120b`
-- Order of work: SFT first, benchmark honestly, then explore GRPO on verifiable tasks
+- Order of work: SFT baseline first, then GRPO on verifiable tasks, then benchmark base vs SFT vs SFT+GRPO in the same harness
 
-This is driven by the actual hardware:
+This is driven by the actual machine budget: `2 x RTX PRO Blackwell 6000` with `96 GB` VRAM each. That is strong enough for iterative `gpt-oss-20b` LoRA research. It is not evidence that `gpt-oss-120b` GRPO is a practical default on this hardware, so the repository does not pretend otherwise.
 
-- 2x RTX PRO Blackwell 6000
-- 96 GB VRAM each
-- 192 GB total VRAM
+## Current Milestone
 
-That hardware is well suited to iterative `gpt-oss-20b` LoRA-style research. It is not evidence that `gpt-oss-120b` GRPO is practical, so this repository does not treat `120b` GRPO as the default path.
+The repository now has a real first benchmark-ready milestone:
 
-## First Milestone
+- frozen SFT and GRPO manifests that encode the current research hypotheses
+- a real materialization pipeline for SFT and GRPO corpora
+- a 51-task internal `ML Research Eval` suite with executable tests and bucket metadata
+- trainable SFT and GRPO entrypoints for `gpt-oss-20b`
+- benchmark configs, reporting paths, and an unattended benchmark pipeline
 
-The first usable milestone is now in place. It gives the project a real end-to-end starting point instead of a plan on paper.
+This is no longer a scaffold. It is the first coherent end-to-end research baseline.
 
-It includes:
+## Validated State
 
-- frozen dataset manifests for the starting SFT and GRPO hypotheses
-- a filtering and splitting pipeline for building a PyTorch/ML slice from broad code corpora
-- a small but real internal `ML Research Eval` harness with executable tests
-- initial SFT and GRPO configs for `gpt-oss-20b`
-- report templates and validation logic that enforce exact logging and benchmark discipline
-- a smoke-validation path that checks the pipeline without launching an expensive training run
+What has been validated in-repo:
 
-The emphasis is deliberate: measurement discipline first, training claims later.
+- internal reference eval passes `51/51`
+- larger benchmark corpora are frozen on disk:
+  - SFT benchmark slice: `977` examples total, `938` train, `39` validation
+  - GRPO benchmark slice: `383` examples total, `363` train, `20` validation
+- the broader validation slice passes: `12` pytest checks
+- SFT and GRPO benchmark configs dry-run successfully with concrete plans
+- GRPO now supports initializing from the best SFT adapter and saving a real adapter artifact
 
-## Current Status
+What previously worked before the current GPU outage:
 
-What works today:
+- a short `gpt-oss-20b` SFT pilot adapter trained successfully
+- on the earlier 4-task pilot eval, base `gpt-oss-20b` scored `1/4` and the pilot SFT adapter scored `3/4`
 
-- the project installs cleanly as a Python package
-- manifest generation and validation run successfully
-- sample code filtering and repo-aware splitting run successfully
-- the internal eval harness executes real task tests
-- SFT and GRPO configs dry-run into concrete, inspectable plans
-- a short local `gpt-oss-20b` SFT pilot completed on the first real materialized SFT slice
-- on the current 4-task internal eval seed, base `gpt-oss-20b` reached `1/4` and the 20-step SFT pilot adapter reached `3/4`
+## What Is Still Not Proven
 
-What is not done yet:
+The project is not “done” by the standards in `AGENTS.md`, because the larger benchmark pipeline has not completed yet on the current 51-task suite.
 
-- no real SFT training run has been completed
-- no benchmark improvement claim exists
-- the internal `ML Research Eval` is still a seed suite, not the full target benchmark
-- external training corpora still need to be materialized from the dataset manifests
+Unproven items remain:
 
-This repository should therefore be read as a serious research bootstrap, not as evidence of model improvement.
+- no completed large benchmark run yet for base vs SFT vs GRPO on the 51-task internal eval
+- no external holdout benchmark report yet
+- no claim that the current SFT or GRPO mixtures are optimal
+- no claim that GRPO improves verified tasks without hurting ML-research behavior
 
-The measured pilot result is still small-sample evidence, not a broad benchmark claim. It is useful because it proves the repo can now move from manifests to a real adapter and a measured before/after check on the internal eval seed.
+The immediate blocker is infrastructure, not repository structure: the current host has no working NVIDIA driver handshake, no `/dev/nvidia*` devices, and PyTorch reports zero CUDA devices. The benchmark pipeline is set up to resume automatically once CUDA is healthy again.
 
-## Key Artifacts
+## What This Repository Already Demonstrates
 
-The most important project files are:
+This work establishes the practical foundation for real `gpt-oss` research:
 
-- dataset hypotheses: `configs/datasets/sft_starting_mix.yaml` and `configs/datasets/grpo_starting_mix.yaml`
-- train configs: `configs/training/sft_gpt_oss_20b_lora.yaml` and `configs/training/grpo_gpt_oss_20b_lora.yaml`
-- internal benchmark seed: `eval/ml_research_eval/`
-- benchmark/report contract: `reports/templates/benchmark_report.md`
+- the data strategy is encoded as manifests instead of vague mixture claims
+- the internal ML benchmark is executable and non-trivial
+- training and evaluation paths are wired to the same benchmark discipline
+- larger runs can now be launched with saved manifests, configs, and report artifacts
 
-The current milestone can be validated with a package install plus the smoke path:
+## Next Execution Step
 
-```bash
-python -m pip install -e .[dev]
-make smoke
-```
+The next meaningful result is not another scaffold change. It is a benchmarked run:
 
-## What This Repository Is Trying To Prove
-
-The central research question is whether a PyTorch- and ML-systems-heavy fine-tuning mixture can move `gpt-oss-20b` in the direction that matters:
-
-- stronger PyTorch coding
-- stronger debugging on real training issues
-- stronger performance on an internal ML research benchmark
-
-The starting SFT and GRPO mixtures in this repository are hypotheses. They are not presented as optimal, and they are not presented as validated until the benchmark harness proves it.
-
-## Next Steps
-
-The next phase should stay narrow and empirical:
-
-1. Materialize the first real SFT dataset slice from the frozen manifests.
-2. Expand the internal `ML Research Eval` from the current seed suite toward the planned 200-500 task range.
-3. Run the first honest baseline comparison: base `gpt-oss-20b` versus SFT on the same evaluation harness.
-4. Only after the SFT baseline is stable, wire GRPO from the best SFT checkpoint onto verifiable tasks.
+1. restore CUDA on the node or move execution to a healthy GPU host
+2. run the benchmark pipeline for base `gpt-oss-20b`, SFT benchmark `v1`, and GRPO benchmark `v1`
+3. write the first honest benchmark report from stored outputs
+4. expand from the 51-task internal suite toward the `200-500` task target in `AGENTS.md`
 
 ## References
 
-This repository is aligned with the current primary documentation for `gpt-oss` fine-tuning and GRPO:
-
 - OpenAI `gpt-oss` fine-tuning cookbook: https://developers.openai.com/cookbook/articles/gpt-oss/fine-tune-transfomers
 - OpenAI `gpt-oss-20b` model page: https://developers.openai.com/api/docs/models/gpt-oss-20b
+- OpenAI `gpt-oss-120b` model page: https://developers.openai.com/api/docs/models/gpt-oss-120b
 - Hugging Face TRL GRPO docs: https://huggingface.co/docs/trl/v0.19.1/grpo_trainer
 - Hugging Face Transformers `gpt_oss` docs: https://huggingface.co/docs/transformers/en/model_doc/gpt_oss

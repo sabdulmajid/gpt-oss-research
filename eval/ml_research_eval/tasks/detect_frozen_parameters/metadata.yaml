@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: easy
+entrypoint: detect_frozen_parameters
+task_id: detect_frozen_parameters
+timeout_sec: 30
+topic: debugging

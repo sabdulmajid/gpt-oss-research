@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: easy
+entrypoint: update_ema
+task_id: ema_update
+timeout_sec: 30
+topic: model_training_loops

@@ -1,0 +1,6 @@
+benchmark_bucket: transformers_accelerate_fsdp_mixed_precision
+difficulty: easy
+entrypoint: shift_labels_for_causal_lm
+task_id: shift_labels_for_causal_lm
+timeout_sec: 30
+topic: transformers

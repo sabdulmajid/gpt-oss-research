@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: medium
+entrypoint: clip_grad_norm_manual
+task_id: gradient_clipping_manual
+timeout_sec: 30
+topic: model_training_loops

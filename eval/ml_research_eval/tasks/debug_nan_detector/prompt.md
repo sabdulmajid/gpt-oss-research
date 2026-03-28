@@ -1,0 +1,1 @@
+Implement a backward hook `detect_nan_hook(module, grad_input, grad_output)` that raises a ValueError if any NaN is found in `grad_input` or `grad_output`.

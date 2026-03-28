@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: easy
+entrypoint: detect_nan_hook
+task_id: debug_nan_detector
+timeout_sec: 30
+topic: debugging

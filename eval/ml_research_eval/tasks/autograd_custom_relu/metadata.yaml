@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: hard
+entrypoint: apply_custom_relu
+task_id: autograd_custom_relu
+timeout_sec: 30
+topic: autograd

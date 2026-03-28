@@ -1,6 +1,6 @@
-task_id: autograd_clip_grad
-topic: autograd_and_training_stability
+benchmark_bucket: debugging_performance
 difficulty: medium
 entrypoint: clip_grad_norm_and_report
+task_id: autograd_clip_grad
 timeout_sec: 30
-
+topic: autograd_and_training_stability

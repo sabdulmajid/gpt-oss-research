@@ -1,6 +1,6 @@
 PYTHON ?= python
 
-.PHONY: manifests validate filter-sample split-sample internal-eval sft-dry-run grpo-dry-run smoke test materialize-sft materialize-grpo model-eval
+.PHONY: manifests validate filter-sample split-sample internal-eval sft-dry-run grpo-dry-run smoke test materialize-sft materialize-grpo materialize-sft-benchmark materialize-grpo-benchmark model-eval benchmark-pipeline
 
 manifests:
 	$(PYTHON) scripts/build_manifest.py configs/datasets/sft_starting_mix.yaml data/manifests/sft_starting_mix.manifest.json
@@ -42,11 +42,20 @@ materialize-sft:
 materialize-grpo:
 	$(PYTHON) scripts/materialize_datasets.py configs/materialization/grpo_real_pilot.yaml
 
+materialize-sft-benchmark:
+	$(PYTHON) scripts/materialize_datasets.py configs/materialization/sft_benchmark_v1.yaml
+
+materialize-grpo-benchmark:
+	$(PYTHON) scripts/materialize_datasets.py configs/materialization/grpo_benchmark_v1.yaml
+
 model-eval:
 	$(PYTHON) scripts/run_model_eval.py \
 		--model-path /pub7/neel2/hf-cache/gpt-oss-20b \
 		--tasks-root eval/ml_research_eval/tasks \
 		--output /pub7/neel2/gpt-oss-research/artifacts/eval/internal_eval_base_report.json
+
+benchmark-pipeline:
+	bash scripts/run_benchmark_pipeline.sh
 
 smoke:
 	$(PYTHON) scripts/smoke_test.py

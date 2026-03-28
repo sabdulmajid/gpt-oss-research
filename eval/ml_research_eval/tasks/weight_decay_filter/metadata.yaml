@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: easy
+entrypoint: split_weight_decay_params
+task_id: weight_decay_filter
+timeout_sec: 30
+topic: model_training_loops

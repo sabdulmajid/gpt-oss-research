@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: medium
+entrypoint: masked_softmax
+task_id: masked_softmax
+timeout_sec: 30
+topic: pytorch_tensor_ops

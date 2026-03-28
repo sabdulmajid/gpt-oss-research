@@ -1,6 +1,6 @@
-task_id: data_collator_pad_labels
-topic: data_pipeline_and_collation
+benchmark_bucket: training_pipeline
 difficulty: medium
 entrypoint: pad_batch
+task_id: data_collator_pad_labels
 timeout_sec: 30
-
+topic: data_pipeline_and_collation

@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: easy
+entrypoint: create_causal_mask
+task_id: attention_mask_create
+timeout_sec: 30
+topic: pytorch_tensor_ops

@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: medium
+entrypoint: focal_loss
+task_id: focal_loss
+timeout_sec: 30
+topic: model_training_loops

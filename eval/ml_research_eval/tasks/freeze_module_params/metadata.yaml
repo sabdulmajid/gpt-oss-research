@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: easy
+entrypoint: freeze_module_params
+task_id: freeze_module_params
+timeout_sec: 30
+topic: model_training_loops

@@ -1,0 +1,6 @@
+benchmark_bucket: transformers_accelerate_fsdp_mixed_precision
+difficulty: easy
+entrypoint: maybe_enable_gradient_checkpointing
+task_id: maybe_enable_gradient_checkpointing
+timeout_sec: 30
+topic: transformers

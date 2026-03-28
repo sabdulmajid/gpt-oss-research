@@ -1,0 +1,6 @@
+benchmark_bucket: transformers_accelerate_fsdp_mixed_precision
+difficulty: easy
+entrypoint: select_autocast_dtype
+task_id: select_autocast_dtype
+timeout_sec: 30
+topic: mixed_precision

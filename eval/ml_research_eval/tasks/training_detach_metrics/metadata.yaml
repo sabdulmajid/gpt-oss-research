@@ -1,6 +1,6 @@
-task_id: training_detach_metrics
-topic: training_loop_logging
+benchmark_bucket: training_pipeline
 difficulty: easy
 entrypoint: detach_metrics_tree
+task_id: training_detach_metrics
 timeout_sec: 30
-
+topic: training_loop_logging

@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: medium
+entrypoint: accumulate_rows
+task_id: accumulate_rows
+timeout_sec: 30
+topic: pytorch_tensor_ops

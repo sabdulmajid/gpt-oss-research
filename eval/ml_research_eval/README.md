@@ -1,12 +1,18 @@
 # Internal ML Research Eval
 
-This is the seed version of the internal benchmark path required by `AGENTS.md`.
+This is the internal benchmark path required by `AGENTS.md`.
 
 Current scope:
 
-- small, CPU-only, executable tasks
-- PyTorch-heavy function implementation tasks
-- task directories with prompt, metadata, reference solution, and tests
+- 51 CPU-executable tasks with prompts, reference solutions, and tests
+- PyTorch- and ML-research-heavy function implementation and debugging tasks
+- explicit benchmark-bucket metadata for composition tracking
 
-This is not yet the full 200-500 task target. It is the first real harness, designed to grow without changing the evaluation contract.
+Current benchmark buckets:
 
+- `tensor_api`
+- `training_pipeline`
+- `transformers_accelerate_fsdp_mixed_precision`
+- `debugging_performance`
+
+This is still below the long-term 200-500 task target from `AGENTS.md`, but it is no longer a seed stub. It is the first serious internal eval slice that can support real base-vs-SFT-vs-GRPO comparisons.

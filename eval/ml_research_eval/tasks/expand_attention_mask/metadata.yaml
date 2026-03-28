@@ -1,0 +1,6 @@
+benchmark_bucket: transformers_accelerate_fsdp_mixed_precision
+difficulty: medium
+entrypoint: expand_attention_mask
+task_id: expand_attention_mask
+timeout_sec: 30
+topic: transformers

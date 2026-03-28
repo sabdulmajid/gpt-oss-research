@@ -3,6 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from ..io import write_json
+from ..reporting import current_git_sha, utc_now_iso
 from .common import TrainingPlan, build_target_parameters, load_training_config, materialized_dataset_summary, validate_training_manifest
 
 
@@ -115,8 +117,33 @@ def run_sft(config_path: str | Path, *, dry_run: bool = False) -> dict[str, Any]
     )
     train_result = trainer.train()
     trainer.save_model(config["output"]["output_dir"])
+    report_path = Path(config["output"]["output_dir"]) / "train_report.json"
+    report = {
+        "generated_at_utc": utc_now_iso(),
+        "git_sha": current_git_sha(),
+        "task_type": "sft",
+        "experiment_name": config["experiment_name"],
+        "config_path": str(config_path),
+        "model_name_or_path": config["model"]["name_or_path"],
+        "teacher_model": config["model"]["teacher_model"],
+        "manifest_path": config["data"]["manifest_path"],
+        "dataset_summary": plan.details["dataset_summary"],
+        "adapter": {
+            "type": config["adapter"]["type"],
+            "r": config["adapter"]["r"],
+            "lora_alpha": config["adapter"]["lora_alpha"],
+            "lora_dropout": config["adapter"]["lora_dropout"],
+            "target_modules": config["adapter"]["target_modules"],
+            "target_parameters": plan.target_parameters,
+        },
+        "training": config["training"],
+        "output_dir": config["output"]["output_dir"],
+        "train_result": train_result.metrics,
+    }
+    write_json(report_path, report)
     return {
         "mode": "train",
         "plan": plan_payload,
         "train_result": train_result.metrics,
+        "report_path": str(report_path),
     }

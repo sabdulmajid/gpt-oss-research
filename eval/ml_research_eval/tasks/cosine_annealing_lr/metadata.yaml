@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: easy
+entrypoint: get_cosine_lr
+task_id: cosine_annealing_lr
+timeout_sec: 30
+topic: model_training_loops

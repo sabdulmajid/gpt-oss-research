@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: medium
+entrypoint: smooth_labels
+task_id: label_smoothing
+timeout_sec: 30
+topic: pytorch_tensor_ops

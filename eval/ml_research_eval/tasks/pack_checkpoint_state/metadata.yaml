@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: easy
+entrypoint: pack_checkpoint_state
+task_id: pack_checkpoint_state
+timeout_sec: 30
+topic: model_training_loops

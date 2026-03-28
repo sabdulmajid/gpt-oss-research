@@ -1,0 +1,6 @@
+benchmark_bucket: transformers_accelerate_fsdp_mixed_precision
+difficulty: medium
+entrypoint: grad_scaler_unscale_and_clip
+task_id: grad_scaler_unscale_and_clip
+timeout_sec: 30
+topic: mixed_precision

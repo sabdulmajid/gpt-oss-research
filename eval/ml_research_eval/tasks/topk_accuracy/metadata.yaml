@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: easy
+entrypoint: topk_accuracy
+task_id: topk_accuracy
+timeout_sec: 30
+topic: model_training_loops

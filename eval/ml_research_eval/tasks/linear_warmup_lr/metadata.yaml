@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: easy
+entrypoint: linear_warmup_lr
+task_id: linear_warmup_lr
+timeout_sec: 30
+topic: model_training_loops

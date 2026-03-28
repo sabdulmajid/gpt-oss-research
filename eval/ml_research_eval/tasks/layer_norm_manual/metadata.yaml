@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: medium
+entrypoint: manual_layer_norm
+task_id: layer_norm_manual
+timeout_sec: 30
+topic: pytorch_tensor_ops

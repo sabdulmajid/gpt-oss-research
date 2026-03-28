@@ -1,0 +1,9 @@
+manifest_path: data/manifests/sft_starting_mix.manifest.json
+task_type: sft
+total_examples: 1536
+output_dir: /pub7/neel2/gpt-oss-research/artifacts/materialized/sft_benchmark_v1
+max_files_per_source: 4
+pyarrow_batch_size: 128
+validation_fraction: 0.05
+hf_cache_dir: /pub7/neel2/hf-cache/hub
+

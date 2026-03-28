@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: medium
+entrypoint: swish_forward
+task_id: memory_efficient_swish
+timeout_sec: 30
+topic: autograd

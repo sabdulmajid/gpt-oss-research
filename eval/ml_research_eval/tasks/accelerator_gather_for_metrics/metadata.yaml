@@ -1,0 +1,6 @@
+benchmark_bucket: transformers_accelerate_fsdp_mixed_precision
+difficulty: easy
+entrypoint: accelerator_gather_for_metrics
+task_id: accelerator_gather_for_metrics
+timeout_sec: 30
+topic: accelerate

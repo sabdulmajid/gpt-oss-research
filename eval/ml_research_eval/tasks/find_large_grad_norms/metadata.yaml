@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: medium
+entrypoint: find_large_grad_norms
+task_id: find_large_grad_norms
+timeout_sec: 30
+topic: debugging

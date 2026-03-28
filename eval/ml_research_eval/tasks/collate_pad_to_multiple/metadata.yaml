@@ -1,0 +1,6 @@
+benchmark_bucket: training_pipeline
+difficulty: medium
+entrypoint: collate_pad_to_multiple
+task_id: collate_pad_to_multiple
+timeout_sec: 30
+topic: data_pipeline_and_collation

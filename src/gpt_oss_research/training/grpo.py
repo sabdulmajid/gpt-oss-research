@@ -6,6 +6,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from ..io import write_json
+from ..reporting import current_git_sha, utc_now_iso
 from ..execution import run_python_io_cases
 from .common import TrainingPlan, build_target_parameters, load_training_config, materialized_dataset_summary, validate_training_manifest
 
@@ -16,11 +18,14 @@ def build_grpo_plan(config_path: str | Path) -> TrainingPlan:
     validate_training_manifest(manifest_path)
 
     target_parameters = build_target_parameters(config["adapter"]["expert_targeting"])
+    init_adapter_path = config["model"].get("init_adapter_path")
     warnings: list[str] = []
     if config["training"].get("use_vllm", False):
         warnings.append("use_vllm is enabled; verify GPU memory headroom before running on the 2x96 GB setup")
     else:
         warnings.append("use_vllm is disabled; this matches the practical colocated/no-server default in AGENTS.md")
+    if init_adapter_path and not Path(init_adapter_path).exists():
+        warnings.append("init_adapter_path is set but does not exist yet; GRPO should start from the best SFT adapter once it is available")
 
     dataset_summary = materialized_dataset_summary(config["data"].get("materialized_dataset_path"))
     if not dataset_summary["present"]:
@@ -36,6 +41,7 @@ def build_grpo_plan(config_path: str | Path) -> TrainingPlan:
             "lora_dropout": config["adapter"]["lora_dropout"],
             "target_modules": config["adapter"]["target_modules"],
         },
+        "init_adapter_path": init_adapter_path,
         "training": config["training"],
         "dataset_summary": dataset_summary,
     }
@@ -158,7 +164,7 @@ def run_grpo(config_path: str | Path, *, dry_run: bool = False) -> dict[str, Any
 
     import torch
     from datasets import load_dataset
-    from peft import LoraConfig
+    from peft import LoraConfig, PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer, Mxfp4Config
     from trl import GRPOConfig, GRPOTrainer
 
@@ -169,13 +175,7 @@ def run_grpo(config_path: str | Path, *, dry_run: bool = False) -> dict[str, Any
 
     dataset = load_dataset("json", data_files={"train": dataset_path})["train"]
     reward_func = make_internal_eval_reward(config["reward"]["tasks_root"])
-    peft_config = LoraConfig(
-        r=config["adapter"]["r"],
-        lora_alpha=config["adapter"]["lora_alpha"],
-        lora_dropout=config["adapter"]["lora_dropout"],
-        target_modules=config["adapter"]["target_modules"],
-        target_parameters=plan.target_parameters,
-    )
+    peft_config = None
     tokenizer = AutoTokenizer.from_pretrained(config["model"]["name_or_path"])
     quantization_config = Mxfp4Config(dequantize=True)
     model = AutoModelForCausalLM.from_pretrained(
@@ -186,6 +186,17 @@ def run_grpo(config_path: str | Path, *, dry_run: bool = False) -> dict[str, Any
         quantization_config=quantization_config,
         use_cache=False,
     )
+    init_adapter_path = config["model"].get("init_adapter_path")
+    if init_adapter_path and Path(init_adapter_path).exists():
+        model = PeftModel.from_pretrained(model, init_adapter_path, is_trainable=True)
+    else:
+        peft_config = LoraConfig(
+            r=config["adapter"]["r"],
+            lora_alpha=config["adapter"]["lora_alpha"],
+            lora_dropout=config["adapter"]["lora_dropout"],
+            target_modules=config["adapter"]["target_modules"],
+            target_parameters=plan.target_parameters,
+        )
     trainer = GRPOTrainer(
         model=model,
         args=GRPOConfig(**config["training"]),
@@ -195,8 +206,36 @@ def run_grpo(config_path: str | Path, *, dry_run: bool = False) -> dict[str, Any
         peft_config=peft_config,
     )
     train_result = trainer.train()
+    trainer.save_model(config["output"]["output_dir"])
+    report_path = Path(config["output"]["output_dir"]) / "train_report.json"
+    report = {
+        "generated_at_utc": utc_now_iso(),
+        "git_sha": current_git_sha(),
+        "task_type": "grpo",
+        "experiment_name": config["experiment_name"],
+        "config_path": str(config_path),
+        "model_name_or_path": config["model"]["name_or_path"],
+        "teacher_model": config["model"]["teacher_model"],
+        "init_adapter_path": config["model"].get("init_adapter_path"),
+        "manifest_path": config["data"]["manifest_path"],
+        "dataset_summary": plan.details["dataset_summary"],
+        "adapter": {
+            "type": config["adapter"]["type"],
+            "r": config["adapter"]["r"],
+            "lora_alpha": config["adapter"]["lora_alpha"],
+            "lora_dropout": config["adapter"]["lora_dropout"],
+            "target_modules": config["adapter"]["target_modules"],
+            "target_parameters": plan.target_parameters,
+        },
+        "reward": config["reward"],
+        "training": config["training"],
+        "output_dir": config["output"]["output_dir"],
+        "train_result": train_result.metrics,
+    }
+    write_json(report_path, report)
     return {
         "mode": "train",
         "plan": plan_payload,
         "train_result": train_result.metrics,
+        "report_path": str(report_path),
     }

@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: hard
+entrypoint: compute_gradient_penalty
+task_id: gradient_penalty
+timeout_sec: 30
+topic: autograd

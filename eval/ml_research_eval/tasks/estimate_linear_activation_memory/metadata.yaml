@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: easy
+entrypoint: estimate_linear_activation_memory
+task_id: estimate_linear_activation_memory
+timeout_sec: 30
+topic: performance

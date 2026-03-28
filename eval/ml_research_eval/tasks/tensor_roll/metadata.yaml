@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: easy
+entrypoint: shift_sequence
+task_id: tensor_roll
+timeout_sec: 30
+topic: pytorch_tensor_ops

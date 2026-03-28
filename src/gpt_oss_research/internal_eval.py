@@ -16,6 +16,7 @@ class EvalTask:
     topic: str
     difficulty: str
     entrypoint: str
+    benchmark_bucket: str
     timeout_sec: int
     path: Path
 
@@ -42,6 +43,7 @@ def discover_tasks(tasks_root: str | Path) -> list[EvalTask]:
             topic=metadata["topic"],
             difficulty=metadata["difficulty"],
             entrypoint=metadata["entrypoint"],
+            benchmark_bucket=str(metadata.get("benchmark_bucket", "unspecified")),
             timeout_sec=int(metadata.get("timeout_sec", 30)),
             path=metadata_path.parent,
         )
@@ -107,15 +109,23 @@ def run_eval(
         results.append(evaluate_solution(task, solution_path))
 
     passed = sum(1 for result in results if result["passed"])
+    bucket_summary: dict[str, dict[str, int]] = {}
+    for task, result in zip(tasks, results):
+        summary = bucket_summary.setdefault(task.benchmark_bucket, {"total": 0, "passed": 0, "failed": 0})
+        summary["total"] += 1
+        if result["passed"]:
+            summary["passed"] += 1
+        else:
+            summary["failed"] += 1
     report = {
         "tasks_root": str(tasks_root),
         "task_count": len(results),
         "passed": passed,
         "failed": len(results) - passed,
         "pass_rate": passed / len(results),
+        "bucket_summary": bucket_summary,
         "results": results,
     }
     if output_path is not None:
         write_json(output_path, report)
     return report
-

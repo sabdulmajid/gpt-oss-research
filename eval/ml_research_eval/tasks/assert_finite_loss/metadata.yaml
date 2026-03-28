@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: easy
+entrypoint: assert_finite_loss
+task_id: assert_finite_loss
+timeout_sec: 30
+topic: debugging

@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: medium
+entrypoint: pairwise_l2_dist
+task_id: tensor_pairwise_dist
+timeout_sec: 30
+topic: pytorch_tensor_ops

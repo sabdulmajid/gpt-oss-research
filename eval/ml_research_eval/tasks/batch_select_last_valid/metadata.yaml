@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: medium
+entrypoint: select_last_valid
+task_id: batch_select_last_valid
+timeout_sec: 30
+topic: pytorch_tensor_ops

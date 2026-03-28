@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: easy
+entrypoint: batched_outer_product
+task_id: batched_outer_product
+timeout_sec: 30
+topic: pytorch_tensor_ops

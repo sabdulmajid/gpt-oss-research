@@ -1,0 +1,6 @@
+benchmark_bucket: debugging_performance
+difficulty: easy
+entrypoint: count_trainable_parameters
+task_id: model_parameter_count
+timeout_sec: 30
+topic: debugging

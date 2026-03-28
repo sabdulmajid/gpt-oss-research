@@ -1,0 +1,44 @@
+experiment_name: gpt_oss_20b_grpo_benchmark_v1
+model:
+  name_or_path: /pub7/neel2/hf-cache/gpt-oss-20b
+  teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+  init_adapter_path: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/sft/gpt_oss_20b_sft_benchmark_v1
+model_load:
+  note: Intended to start from the larger SFT benchmark checkpoint once the GPU node is healthy again.
+adapter:
+  type: lora
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.0
+  target_modules: all-linear
+  expert_targeting:
+    enabled: true
+    layer_indices: [7, 15, 23]
+    parameter_templates:
+      - "{layer}.mlp.experts.gate_up_proj"
+      - "{layer}.mlp.experts.down_proj"
+data:
+  manifest_path: data/manifests/grpo_starting_mix.manifest.json
+  materialized_dataset_path: /pub7/neel2/gpt-oss-research/artifacts/materialized/grpo_benchmark_v1/train.jsonl
+reward:
+  type: mixed_verifiable
+  tasks_root: eval/ml_research_eval/tasks
+output:
+  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/grpo/gpt_oss_20b_grpo_benchmark_v1
+  report_dir: /pub7/neel2/gpt-oss-research/reports/experiments
+training:
+  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/grpo/gpt_oss_20b_grpo_benchmark_v1
+  seed: 1337
+  learning_rate: 1.0e-6
+  gradient_checkpointing: true
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 4
+  max_steps: 60
+  save_steps: 20
+  logging_steps: 1
+  num_generations: 2
+  max_completion_length: 512
+  beta: 0.0
+  bf16: true
+  use_vllm: false
+  report_to: none

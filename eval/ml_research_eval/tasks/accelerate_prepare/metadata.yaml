@@ -1,0 +1,6 @@
+benchmark_bucket: transformers_accelerate_fsdp_mixed_precision
+difficulty: easy
+entrypoint: prepare_components
+task_id: accelerate_prepare
+timeout_sec: 30
+topic: FSDP/Accelerate

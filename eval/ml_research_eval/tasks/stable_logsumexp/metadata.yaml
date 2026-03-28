@@ -1,0 +1,6 @@
+benchmark_bucket: tensor_api
+difficulty: medium
+entrypoint: stable_logsumexp
+task_id: stable_logsumexp
+timeout_sec: 30
+topic: pytorch_tensor_ops
