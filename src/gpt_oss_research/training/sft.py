@@ -95,10 +95,22 @@ def run_sft(config_path: str | Path, *, dry_run: bool = False) -> dict[str, Any]
     peft_model = get_peft_model(model, peft_config)
 
     dataset = load_dataset("json", data_files={"train": dataset_path})
+    train_dataset = dataset["train"]
+
+    def format_messages(example):
+        return {
+            "text": tokenizer.apply_chat_template(
+                example["messages"],
+                tokenize=False,
+                add_generation_prompt=False,
+            )
+        }
+
+    train_dataset = train_dataset.map(format_messages, remove_columns=train_dataset.column_names)
     trainer = SFTTrainer(
         model=peft_model,
         args=SFTConfig(**config["training"]),
-        train_dataset=dataset["train"],
+        train_dataset=train_dataset,
         processing_class=tokenizer,
     )
     train_result = trainer.train()

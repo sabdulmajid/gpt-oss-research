@@ -6,6 +6,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from ..execution import run_python_io_cases
 from .common import TrainingPlan, build_target_parameters, load_training_config, materialized_dataset_summary, validate_training_manifest
 
 
@@ -67,6 +68,52 @@ def _extract_completion_text(completion: Any) -> str:
 def make_internal_eval_reward(tasks_root: str | Path):
     root = Path(tasks_root)
 
+    def reward_func(completions, checker_type, tests, task_id=None, **kwargs):
+        rewards: list[float] = []
+        task_ids = task_id or [None] * len(completions)
+        for completion, current_checker, test_blob, current_task_id in zip(completions, checker_type, tests, task_ids):
+            completion_text = _extract_completion_text(completion)
+            if current_checker == "internal_eval_task":
+                resolved_task_id = (test_blob or {}).get("task_id") or current_task_id
+                task_dir = root / str(resolved_task_id).replace("internal_eval:", "")
+                tests_path = task_dir / "tests.py"
+                if not tests_path.exists():
+                    rewards.append(0.0)
+                    continue
+                with tempfile.TemporaryDirectory(prefix=f"reward-{resolved_task_id}-") as temp_dir_name:
+                    temp_dir = Path(temp_dir_name)
+                    (temp_dir / "solution.py").write_text(completion_text, encoding="utf-8")
+                    shutil.copy2(tests_path, temp_dir / "test_solution.py")
+                    result = subprocess.run(
+                        ["python", "-m", "pytest", "-q", "test_solution.py"],
+                        cwd=temp_dir,
+                        capture_output=True,
+                        text=True,
+                        timeout=30,
+                        check=False,
+                    )
+                rewards.append(1.0 if result.returncode == 0 else 0.0)
+                continue
+
+            if current_checker == "python_io_tests":
+                io_result = run_python_io_cases(
+                    completion_text,
+                    list((test_blob or {}).get("cases", [])),
+                    timeout_sec=float((test_blob or {}).get("timeout_sec", 2.0)),
+                )
+                rewards.append(float(io_result["score"]))
+                continue
+
+            rewards.append(0.0)
+
+        return rewards
+
+    return reward_func
+
+
+def make_internal_eval_reward_legacy(tasks_root: str | Path):
+    root = Path(tasks_root)
+
     def reward_func(completions, task_id, **kwargs):
         rewards: list[float] = []
         for completion, current_task_id in zip(completions, task_id):
@@ -109,8 +156,10 @@ def run_grpo(config_path: str | Path, *, dry_run: bool = False) -> dict[str, Any
     if dry_run:
         return {"mode": "dry_run", "plan": plan_payload}
 
+    import torch
     from datasets import load_dataset
     from peft import LoraConfig
+    from transformers import AutoModelForCausalLM, AutoTokenizer, Mxfp4Config
     from trl import GRPOConfig, GRPOTrainer
 
     config = load_training_config(config_path)
@@ -127,11 +176,22 @@ def run_grpo(config_path: str | Path, *, dry_run: bool = False) -> dict[str, Any
         target_modules=config["adapter"]["target_modules"],
         target_parameters=plan.target_parameters,
     )
+    tokenizer = AutoTokenizer.from_pretrained(config["model"]["name_or_path"])
+    quantization_config = Mxfp4Config(dequantize=True)
+    model = AutoModelForCausalLM.from_pretrained(
+        config["model"]["name_or_path"],
+        device_map="auto",
+        attn_implementation="eager",
+        torch_dtype=torch.bfloat16,
+        quantization_config=quantization_config,
+        use_cache=False,
+    )
     trainer = GRPOTrainer(
-        model=config["model"]["name_or_path"],
+        model=model,
         args=GRPOConfig(**config["training"]),
         reward_funcs=reward_func,
         train_dataset=dataset,
+        processing_class=tokenizer,
         peft_config=peft_config,
     )
     train_result = trainer.train()
