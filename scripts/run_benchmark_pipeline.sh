@@ -26,20 +26,16 @@ log() {
 }
 
 cuda_ready() {
-  if ! nvidia-smi >/dev/null 2>&1; then
-    return 1
-  fi
-  python - <<'PY' >/dev/null 2>&1
-import torch
-raise SystemExit(0 if torch.cuda.is_available() and torch.cuda.device_count() > 0 else 1)
-PY
+  python scripts/gpu_diagnostics.py --ready-check >/dev/null 2>&1
 }
 
 wait_for_cuda() {
   until cuda_ready; do
+    log "$(python scripts/gpu_diagnostics.py --summary-line)"
     log "CUDA not ready; waiting 60s"
     sleep 60
   done
+  log "$(python scripts/gpu_diagnostics.py --summary-line)"
   log "CUDA is ready"
 }
 

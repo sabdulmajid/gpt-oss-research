@@ -1,6 +1,6 @@
 PYTHON ?= python
 
-.PHONY: manifests validate filter-sample split-sample internal-eval sft-dry-run grpo-dry-run smoke test materialize-sft materialize-grpo materialize-sft-benchmark materialize-grpo-benchmark model-eval benchmark-pipeline
+.PHONY: manifests validate filter-sample split-sample internal-eval sft-dry-run grpo-dry-run smoke test materialize-sft materialize-grpo materialize-sft-benchmark materialize-grpo-benchmark model-eval benchmark-pipeline gpu-diagnose benchmark-start benchmark-status benchmark-tail
 
 manifests:
 	$(PYTHON) scripts/build_manifest.py configs/datasets/sft_starting_mix.yaml data/manifests/sft_starting_mix.manifest.json
@@ -56,6 +56,18 @@ model-eval:
 
 benchmark-pipeline:
 	bash scripts/run_benchmark_pipeline.sh
+
+gpu-diagnose:
+	$(PYTHON) scripts/gpu_diagnostics.py --summary
+
+benchmark-start:
+	bash scripts/start_benchmark_pipeline_tmux.sh
+
+benchmark-status:
+	$(PYTHON) scripts/benchmark_status.py
+
+benchmark-tail:
+	tail -n 50 artifacts/logs/benchmark_pipeline_v1.log
 
 smoke:
 	$(PYTHON) scripts/smoke_test.py

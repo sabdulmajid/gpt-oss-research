@@ -38,6 +38,8 @@ gpt-oss-run-internal-eval = "gpt_oss_research.cli.run_internal_eval:main"
 gpt-oss-run-model-eval = "gpt_oss_research.cli.run_model_eval:main"
 gpt-oss-run-sft = "gpt_oss_research.cli.run_sft:main"
 gpt-oss-run-grpo = "gpt_oss_research.cli.run_grpo:main"
+gpt-oss-gpu-diagnostics = "gpt_oss_research.cli.gpu_diagnostics:main"
+gpt-oss-benchmark-status = "gpt_oss_research.cli.benchmark_status:main"
 gpt-oss-smoke = "gpt_oss_research.cli.smoke:main"
 
 [tool.hatch.build.targets.wheel]

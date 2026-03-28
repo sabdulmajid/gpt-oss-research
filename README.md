@@ -61,6 +61,8 @@ Unproven items remain:
 
 The immediate blocker is infrastructure, not repository structure: the current host has no working NVIDIA driver handshake, no `/dev/nvidia*` devices, and PyTorch reports zero CUDA devices. The benchmark pipeline is set up to resume automatically once CUDA is healthy again.
 
+Operational recovery notes live in [docs/ops/gpu_recovery.md](/pub7/neel2/gpt-oss-research/docs/ops/gpu_recovery.md).
+
 ## What This Repository Already Demonstrates
 
 This work establishes the practical foundation for real `gpt-oss` research:
