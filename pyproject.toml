@@ -30,10 +30,12 @@ dev = [
 
 [project.scripts]
 gpt-oss-build-manifest = "gpt_oss_research.cli.build_manifest:main"
+gpt-oss-materialize = "gpt_oss_research.cli.materialize:main"
 gpt-oss-filter-code = "gpt_oss_research.cli.filter_code:main"
 gpt-oss-create-split = "gpt_oss_research.cli.create_split:main"
 gpt-oss-validate-manifest = "gpt_oss_research.cli.validate_manifest:main"
 gpt-oss-run-internal-eval = "gpt_oss_research.cli.run_internal_eval:main"
+gpt-oss-run-model-eval = "gpt_oss_research.cli.run_model_eval:main"
 gpt-oss-run-sft = "gpt_oss_research.cli.run_sft:main"
 gpt-oss-run-grpo = "gpt_oss_research.cli.run_grpo:main"
 gpt-oss-smoke = "gpt_oss_research.cli.smoke:main"
@@ -44,4 +46,3 @@ packages = ["src/gpt_oss_research"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
-

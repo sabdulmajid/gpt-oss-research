@@ -49,6 +49,8 @@ What works today:
 - sample code filtering and repo-aware splitting run successfully
 - the internal eval harness executes real task tests
 - SFT and GRPO configs dry-run into concrete, inspectable plans
+- a short local `gpt-oss-20b` SFT pilot completed on the first real materialized SFT slice
+- on the current 4-task internal eval seed, base `gpt-oss-20b` reached `1/4` and the 20-step SFT pilot adapter reached `3/4`
 
 What is not done yet:
 
@@ -58,6 +60,8 @@ What is not done yet:
 - external training corpora still need to be materialized from the dataset manifests
 
 This repository should therefore be read as a serious research bootstrap, not as evidence of model improvement.
+
+The measured pilot result is still small-sample evidence, not a broad benchmark claim. It is useful because it proves the repo can now move from manifests to a real adapter and a measured before/after check on the internal eval seed.
 
 ## Key Artifacts
 

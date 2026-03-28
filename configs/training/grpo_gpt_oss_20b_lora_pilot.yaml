@@ -1,10 +1,10 @@
-experiment_name: gpt_oss_20b_grpo_baseline_v1
+experiment_name: gpt_oss_20b_grpo_pilot_v1
 model:
-  name_or_path: openai/gpt-oss-20b
+  name_or_path: /pub7/neel2/hf-cache/gpt-oss-20b
   teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
   init_adapter_path: null
 model_load:
-  note: GRPO starts from gpt-oss-20b; wiring a best-SFT checkpoint is the intended next step after the first honest SFT benchmark.
+  note: Pilot GRPO remains after SFT benchmarking; this config points at a real materialized verifiable slice.
 adapter:
   type: lora
   r: 16
@@ -19,22 +19,22 @@ adapter:
       - "{layer}.mlp.experts.down_proj"
 data:
   manifest_path: data/manifests/grpo_starting_mix.manifest.json
-  materialized_dataset_path: data/samples/grpo_smoke_dataset.jsonl
+  materialized_dataset_path: /pub7/neel2/gpt-oss-research/artifacts/materialized/grpo_real_pilot_v1/train.jsonl
 reward:
-  type: internal_eval_pass
+  type: mixed_verifiable
   tasks_root: eval/ml_research_eval/tasks
 output:
-  output_dir: artifacts/checkpoints/grpo/gpt_oss_20b_grpo_baseline_v1
-  report_dir: reports/experiments
+  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/grpo/gpt_oss_20b_grpo_pilot_v1
+  report_dir: /pub7/neel2/gpt-oss-research/reports/experiments
 training:
-  output_dir: artifacts/checkpoints/grpo/gpt_oss_20b_grpo_baseline_v1
+  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/grpo/gpt_oss_20b_grpo_pilot_v1
   learning_rate: 1.0e-6
   gradient_checkpointing: true
-  num_train_epochs: 1
-  logging_steps: 1
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 8
-  num_generations: 4
+  gradient_accumulation_steps: 4
+  max_steps: 10
+  logging_steps: 1
+  num_generations: 2
   max_completion_length: 768
   beta: 0.0
   bf16: true

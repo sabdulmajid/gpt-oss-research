@@ -1,0 +1,9 @@
+manifest_path: data/manifests/grpo_starting_mix.manifest.json
+task_type: grpo
+total_examples: 128
+output_dir: /pub7/neel2/gpt-oss-research/artifacts/materialized/grpo_real_pilot_v1
+max_files_per_source: 1
+pyarrow_batch_size: 64
+validation_fraction: 0.05
+hf_cache_dir: /pub7/neel2/hf-cache/hub
+

@@ -1,6 +1,6 @@
-experiment_name: gpt_oss_20b_sft_baseline_v1
+experiment_name: gpt_oss_20b_sft_pilot_v1
 model:
-  name_or_path: openai/gpt-oss-20b
+  name_or_path: /pub7/neel2/hf-cache/gpt-oss-20b
   teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
 model_load:
   quantization: mxfp4
@@ -23,23 +23,21 @@ adapter:
       - "{layer}.mlp.experts.down_proj"
 data:
   manifest_path: data/manifests/sft_starting_mix.manifest.json
-  materialized_dataset_path: data/samples/sft_smoke_dataset.jsonl
+  materialized_dataset_path: /pub7/neel2/gpt-oss-research/artifacts/materialized/sft_real_pilot_v1/train.jsonl
 output:
-  output_dir: artifacts/checkpoints/sft/gpt_oss_20b_sft_baseline_v1
-  report_dir: reports/experiments
+  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/sft/gpt_oss_20b_sft_pilot_v1
+  report_dir: /pub7/neel2/gpt-oss-research/reports/experiments
 training:
-  output_dir: artifacts/checkpoints/sft/gpt_oss_20b_sft_baseline_v1
+  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/sft/gpt_oss_20b_sft_pilot_v1
   learning_rate: 2.0e-4
   gradient_checkpointing: true
-  num_train_epochs: 1
-  logging_steps: 1
   per_device_train_batch_size: 1
-  gradient_accumulation_steps: 16
-  max_length: 4096
+  gradient_accumulation_steps: 8
+  max_steps: 20
+  logging_steps: 1
+  save_steps: 20
+  max_length: 3072
   warmup_ratio: 0.03
-  lr_scheduler_type: cosine_with_min_lr
-  lr_scheduler_kwargs:
-    min_lr_rate: 0.1
-  save_steps: 100
+  lr_scheduler_type: cosine
   bf16: true
   report_to: none
