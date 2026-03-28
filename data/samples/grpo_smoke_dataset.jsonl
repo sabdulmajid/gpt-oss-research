@@ -1,0 +1,3 @@
+{"prompt": "Implement masked_mean_pool(hidden_states, attention_mask) so it averages only valid tokens and is safe when the mask is all zeros.", "task_id": "transformer_masked_mean_pool"}
+{"prompt": "Implement pad_batch(examples, pad_token_id) to build input_ids, attention_mask, and labels with -100 label padding.", "task_id": "data_collator_pad_labels"}
+

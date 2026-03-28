@@ -1,0 +1,155 @@
+{
+  "base_train_target": "openai/gpt-oss-20b",
+  "benchmark_holdouts": [
+    "livecodebench",
+    "apps_holdout",
+    "taco_holdout",
+    "codecontests_holdout",
+    "codeforces_holdout",
+    "ml_research_eval_holdout"
+  ],
+  "buckets": [
+    {
+      "category": "broad_code",
+      "filters": {
+        "deduplicate_exact": true,
+        "deduplicate_near": true,
+        "language": "python",
+        "require_torch_or_ml_signal": true,
+        "syntax_check": true
+      },
+      "hypothesis_status": "hypothesis",
+      "name": "filtered_pytorch_ml_repo_code",
+      "purpose": "Core PyTorch and ML infra specialization.",
+      "share": 0.35,
+      "share_pct": 35.0,
+      "source_count": 2,
+      "sources": [
+        {
+          "name": "bigcode/the-stack-v2-dedup",
+          "role": "broad_code_source",
+          "split": "train"
+        },
+        {
+          "name": "codeparrot/github-code",
+          "role": "broad_code_source",
+          "split": "train"
+        }
+      ],
+      "verifiable": false
+    },
+    {
+      "category": "verified_tasks",
+      "hypothesis_status": "hypothesis",
+      "name": "verified_coding_tasks",
+      "purpose": "Execution-grounded correctness and structured coding behavior.",
+      "share": 0.3,
+      "share_pct": 30.0,
+      "source_count": 4,
+      "sources": [
+        {
+          "name": "codeparrot/apps",
+          "role": "verified_tasks",
+          "split": "train"
+        },
+        {
+          "name": "BAAI/TACO",
+          "role": "verified_tasks",
+          "split": "train"
+        },
+        {
+          "name": "deepmind/code_contests",
+          "role": "verified_tasks",
+          "split": "train"
+        },
+        {
+          "name": "open-r1/codeforces",
+          "role": "verified_tasks",
+          "split": "train"
+        }
+      ],
+      "verifiable": true
+    },
+    {
+      "category": "specialist_debugging",
+      "hypothesis_status": "hypothesis",
+      "name": "pytorch_qa_issues_tutorials",
+      "purpose": "Debugging, API fluency, and issue-style ML troubleshooting.",
+      "share": 0.2,
+      "share_pct": 20.0,
+      "source_count": 3,
+      "sources": [
+        {
+          "name": "shrinath-suresh/stack_overflow_pytorch",
+          "role": "pytorch_specialist",
+          "split": "train"
+        },
+        {
+          "name": "shrinath-suresh/pytorch-discuss-tutorial-1000",
+          "role": "pytorch_specialist",
+          "split": "train"
+        },
+        {
+          "name": "BigTimeCoderSean/pytorch-issues",
+          "role": "pytorch_specialist",
+          "split": "train"
+        }
+      ],
+      "verifiable": false
+    },
+    {
+      "category": "hf_training_stack",
+      "hypothesis_status": "hypothesis",
+      "name": "hf_transformers_training_code",
+      "purpose": "HF training loop and model-training stack fluency.",
+      "share": 0.1,
+      "share_pct": 10.0,
+      "source_count": 2,
+      "sources": [
+        {
+          "name": "suvadityamuk/huggingface-transformers-code-dataset",
+          "role": "hf_stack",
+          "split": "train"
+        },
+        {
+          "name": "filtered_transformers_repos",
+          "role": "custom_filtered_repo_slice",
+          "split": "train"
+        }
+      ],
+      "verifiable": false
+    },
+    {
+      "cap_rationale": "Synthetic reasoning is intentionally limited until ablations prove value.",
+      "capped": true,
+      "category": "synthetic_reasoning",
+      "hypothesis_status": "hypothesis",
+      "name": "synthetic_reasoning_for_code",
+      "purpose": "Small capped reasoning augmentation only.",
+      "share": 0.05,
+      "share_pct": 5.0,
+      "source_count": 1,
+      "sources": [
+        {
+          "name": "nvidia/OpenCodeReasoning",
+          "role": "synthetic_reasoning",
+          "split": "train"
+        }
+      ],
+      "verifiable": false
+    }
+  ],
+  "description": "First serious SFT hypothesis from AGENTS.md. This is a research starting point, not a proven optimum.\n",
+  "frozen_at_utc": "2026-03-28T07:54:52.766670+00:00",
+  "manifest_name": "sft_starting_mix_v1",
+  "source_spec_path": "configs/datasets/sft_starting_mix.yaml",
+  "split_strategy": {
+    "group_by": "repository_or_task_source",
+    "notes": "Split by repository identity or task source before any training run.",
+    "prevent_eval_contamination": true,
+    "validation_fraction": 0.05
+  },
+  "task_type": "sft",
+  "teacher_model": "/pub7/neel2/hf-cache/gpt-oss-120b",
+  "version": 1
+}

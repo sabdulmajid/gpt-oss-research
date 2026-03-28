@@ -1,0 +1,101 @@
+manifest_name: sft_starting_mix_v1
+version: 1
+task_type: sft
+description: >
+  First serious SFT hypothesis from AGENTS.md. This is a research starting point,
+  not a proven optimum.
+base_train_target: openai/gpt-oss-20b
+teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+benchmark_holdouts:
+  - livecodebench
+  - apps_holdout
+  - taco_holdout
+  - codecontests_holdout
+  - codeforces_holdout
+  - ml_research_eval_holdout
+split_strategy:
+  group_by: repository_or_task_source
+  validation_fraction: 0.05
+  prevent_eval_contamination: true
+  notes: Split by repository identity or task source before any training run.
+buckets:
+  - name: filtered_pytorch_ml_repo_code
+    share: 0.35
+    category: broad_code
+    purpose: Core PyTorch and ML infra specialization.
+    hypothesis_status: hypothesis
+    verifiable: false
+    sources:
+      - name: bigcode/the-stack-v2-dedup
+        split: train
+        role: broad_code_source
+      - name: codeparrot/github-code
+        split: train
+        role: broad_code_source
+    filters:
+      language: python
+      require_torch_or_ml_signal: true
+      syntax_check: true
+      deduplicate_exact: true
+      deduplicate_near: true
+  - name: verified_coding_tasks
+    share: 0.30
+    category: verified_tasks
+    purpose: Execution-grounded correctness and structured coding behavior.
+    hypothesis_status: hypothesis
+    verifiable: true
+    sources:
+      - name: codeparrot/apps
+        split: train
+        role: verified_tasks
+      - name: BAAI/TACO
+        split: train
+        role: verified_tasks
+      - name: deepmind/code_contests
+        split: train
+        role: verified_tasks
+      - name: open-r1/codeforces
+        split: train
+        role: verified_tasks
+  - name: pytorch_qa_issues_tutorials
+    share: 0.20
+    category: specialist_debugging
+    purpose: Debugging, API fluency, and issue-style ML troubleshooting.
+    hypothesis_status: hypothesis
+    verifiable: false
+    sources:
+      - name: shrinath-suresh/stack_overflow_pytorch
+        split: train
+        role: pytorch_specialist
+      - name: shrinath-suresh/pytorch-discuss-tutorial-1000
+        split: train
+        role: pytorch_specialist
+      - name: BigTimeCoderSean/pytorch-issues
+        split: train
+        role: pytorch_specialist
+  - name: hf_transformers_training_code
+    share: 0.10
+    category: hf_training_stack
+    purpose: HF training loop and model-training stack fluency.
+    hypothesis_status: hypothesis
+    verifiable: false
+    sources:
+      - name: suvadityamuk/huggingface-transformers-code-dataset
+        split: train
+        role: hf_stack
+      - name: filtered_transformers_repos
+        split: train
+        role: custom_filtered_repo_slice
+  - name: synthetic_reasoning_for_code
+    share: 0.05
+    category: synthetic_reasoning
+    purpose: Small capped reasoning augmentation only.
+    hypothesis_status: hypothesis
+    verifiable: false
+    capped: true
+    cap_rationale: Synthetic reasoning is intentionally limited until ablations prove value.
+    sources:
+      - name: nvidia/OpenCodeReasoning
+        split: train
+        role: synthetic_reasoning
+

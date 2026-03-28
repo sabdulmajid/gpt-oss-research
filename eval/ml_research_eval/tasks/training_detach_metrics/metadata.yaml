@@ -1,0 +1,6 @@
+task_id: training_detach_metrics
+topic: training_loop_logging
+difficulty: easy
+entrypoint: detach_metrics_tree
+timeout_sec: 30
+

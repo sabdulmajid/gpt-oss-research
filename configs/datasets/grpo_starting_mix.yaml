@@ -1,0 +1,72 @@
+manifest_name: grpo_starting_mix_v1
+version: 1
+task_type: grpo
+description: >
+  First GRPO hypothesis from AGENTS.md. Every bucket is verifiable and intended for
+  reward-by-execution, not style-only optimization.
+base_train_target: openai/gpt-oss-20b
+teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+benchmark_holdouts:
+  - livecodebench
+  - apps_holdout
+  - taco_holdout
+  - codecontests_holdout
+  - codeforces_holdout
+  - ml_research_eval_holdout
+split_strategy:
+  group_by: repository_or_task_source
+  validation_fraction: 0.05
+  prevent_eval_contamination: true
+  notes: Keep GRPO data narrower and cleaner than SFT and avoid any benchmark overlap.
+buckets:
+  - name: internal_ml_research_tasks
+    share: 0.35
+    category: internal_eval_tasks
+    purpose: Direct optimization for the target ML research coding behavior.
+    hypothesis_status: hypothesis
+    verifiable: true
+    sources:
+      - name: internal/ml-research-eval-train
+        split: train
+        role: internal_eval
+  - name: codeforces_verified
+    share: 0.25
+    category: verified_tasks
+    purpose: Strong algorithmic rigor with official tests and checkers.
+    hypothesis_status: hypothesis
+    verifiable: true
+    sources:
+      - name: open-r1/codeforces
+        split: train
+        role: verified_tasks
+  - name: code_contests_verified
+    share: 0.20
+    category: verified_tasks
+    purpose: Multi-solution correctness-focused coding tasks.
+    hypothesis_status: hypothesis
+    verifiable: true
+    sources:
+      - name: deepmind/code_contests
+        split: train
+        role: verified_tasks
+  - name: taco_verified
+    share: 0.10
+    category: verified_tasks
+    purpose: Natural-language-to-Python synthesis with tests.
+    hypothesis_status: hypothesis
+    verifiable: true
+    sources:
+      - name: BAAI/TACO
+        split: train
+        role: verified_tasks
+  - name: apps_verified
+    share: 0.10
+    category: verified_tasks
+    purpose: Execution-grounded coding tasks with checkable behavior.
+    hypothesis_status: hypothesis
+    verifiable: true
+    sources:
+      - name: codeparrot/apps
+        split: train
+        role: verified_tasks
+

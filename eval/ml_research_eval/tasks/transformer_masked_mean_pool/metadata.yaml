@@ -1,0 +1,6 @@
+task_id: transformer_masked_mean_pool
+topic: transformers_and_tensor_ops
+difficulty: medium
+entrypoint: masked_mean_pool
+timeout_sec: 30
+

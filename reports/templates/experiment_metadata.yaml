@@ -1,0 +1,29 @@
+experiment_name: ""
+date_utc: ""
+git_sha: ""
+base_model: "openai/gpt-oss-20b"
+teacher_model: "/pub7/neel2/hf-cache/gpt-oss-120b"
+adapter_strategy:
+  type: lora
+  rank:
+  alpha:
+  target_modules:
+  target_parameters:
+manifest_path: ""
+seed:
+sequence_length:
+train_examples:
+train_tokens:
+decoding_settings:
+  temperature:
+  top_p:
+  top_k:
+  max_new_tokens:
+metrics:
+  ml_research_eval:
+  apps_holdout:
+  taco_holdout:
+  codecontests_holdout:
+  codeforces_holdout:
+notes: ""
+

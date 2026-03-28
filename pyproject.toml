@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gpt-oss-research"
+version = "0.1.0"
+description = "Manifest-driven research scaffolding for a gpt-oss ML coding model."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+authors = [
+  {name = "OpenAI Codex"},
+]
+dependencies = [
+  "accelerate>=1.10.0",
+  "datasets>=4.8.0",
+  "peft>=0.17.0",
+  "pydantic>=2.9.0",
+  "pyyaml>=6.0.2",
+  "torch>=2.9.0",
+  "transformers>=4.55.0",
+  "trl>=0.20.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=9.0.0",
+]
+
+[project.scripts]
+gpt-oss-build-manifest = "gpt_oss_research.cli.build_manifest:main"
+gpt-oss-filter-code = "gpt_oss_research.cli.filter_code:main"
+gpt-oss-create-split = "gpt_oss_research.cli.create_split:main"
+gpt-oss-validate-manifest = "gpt_oss_research.cli.validate_manifest:main"
+gpt-oss-run-internal-eval = "gpt_oss_research.cli.run_internal_eval:main"
+gpt-oss-run-sft = "gpt_oss_research.cli.run_sft:main"
+gpt-oss-run-grpo = "gpt_oss_research.cli.run_grpo:main"
+gpt-oss-smoke = "gpt_oss_research.cli.smoke:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gpt_oss_research"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+

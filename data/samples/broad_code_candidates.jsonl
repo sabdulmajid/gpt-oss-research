@@ -1,0 +1,7 @@
+{"content": "import torch\nfrom torch.utils.data import Dataset\n\nclass MyDataset(Dataset):\n    def __len__(self):\n        return 128\n", "language": "Python", "path": "src/dataset.py", "repo_name": "vision-trainer"}
+{"content": "from flask import Flask\napp = Flask(__name__)\n", "language": "Python", "path": "app.py", "repo_name": "web-backend"}
+{"content": "import torch\nfrom torch.utils.data import Dataset\n\nclass MyDataset(Dataset):\n    def __len__(self):\n        return 128\n", "language": "Python", "path": "duplicate/dataset.py", "repo_name": "vision-trainer-fork"}
+{"content": "import torch\n\ndef broken(:\n    return 3\n", "language": "Python", "path": "train.py", "repo_name": "bad-ml-repo"}
+{"content": "import torch\nfrom transformers import AutoModel\n\ndef train_step(model, batch):\n    return model(**batch)\n", "language": "Python", "path": "trainer.py", "repo_name": "nlp-stack"}
+{"content": "console.log('hello');\n", "language": "JavaScript", "path": "index.js", "repo_name": "frontend"}
+
