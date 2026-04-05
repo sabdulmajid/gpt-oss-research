@@ -1,7 +1,7 @@
 experiment_name: gpt_oss_20b_grpo_baseline_v1
 model:
   name_or_path: openai/gpt-oss-20b
-  teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+  teacher_model: ${GPT_OSS_120B_PATH:-openai/gpt-oss-120b}
   init_adapter_path: null
 model_load:
   note: GRPO starts from gpt-oss-20b; wiring a best-SFT checkpoint is the intended next step after the first honest SFT benchmark.

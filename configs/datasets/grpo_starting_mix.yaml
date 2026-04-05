@@ -2,10 +2,10 @@ manifest_name: grpo_starting_mix_v1
 version: 1
 task_type: grpo
 description: >
-  First GRPO hypothesis from AGENTS.md. Every bucket is verifiable and intended for
+  First GRPO hypothesis for this project. Every bucket is verifiable and intended for
   reward-by-execution, not style-only optimization.
 base_train_target: openai/gpt-oss-20b
-teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+teacher_model: ${GPT_OSS_120B_PATH:-openai/gpt-oss-120b}
 benchmark_holdouts:
   - livecodebench
   - apps_holdout
@@ -69,4 +69,3 @@ buckets:
       - name: codeparrot/apps
         split: train
         role: verified_tasks
-

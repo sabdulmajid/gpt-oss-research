@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 
-ROOT = Path("/pub7/neel2/gpt-oss-research")
+ROOT = Path(__file__).resolve().parents[2]
 SESSION_NAME = "benchmark-pipeline"
 LOG_PATH = ROOT / "artifacts" / "logs" / "benchmark_pipeline_v1.log"
 BASE_REPORT = ROOT / "artifacts" / "eval" / "internal_eval_base_51_v1.json"

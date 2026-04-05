@@ -1,9 +1,8 @@
 manifest_path: data/manifests/sft_starting_mix.manifest.json
 task_type: sft
 total_examples: 320
-output_dir: /pub7/neel2/gpt-oss-research/artifacts/materialized/sft_real_pilot_v1
+output_dir: artifacts/materialized/sft_real_pilot_v1
 max_files_per_source: 1
 pyarrow_batch_size: 64
 validation_fraction: 0.05
-hf_cache_dir: /pub7/neel2/hf-cache/hub
-
+hf_cache_dir: ${HF_CACHE_DIR:-~/.cache/huggingface/hub}

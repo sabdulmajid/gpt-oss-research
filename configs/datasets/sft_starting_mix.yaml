@@ -2,10 +2,10 @@ manifest_name: sft_starting_mix_v1
 version: 1
 task_type: sft
 description: >
-  First serious SFT hypothesis from AGENTS.md. This is a research starting point,
+  First serious SFT hypothesis for this project. This is a research starting point,
   not a proven optimum.
 base_train_target: openai/gpt-oss-20b
-teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+teacher_model: ${GPT_OSS_120B_PATH:-openai/gpt-oss-120b}
 benchmark_holdouts:
   - livecodebench
   - apps_holdout
@@ -98,4 +98,3 @@ buckets:
       - name: nvidia/OpenCodeReasoning
         split: train
         role: synthetic_reasoning
-

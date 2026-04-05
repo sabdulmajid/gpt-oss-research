@@ -89,7 +89,7 @@ def validate_manifest_spec(spec: dict[str, Any], *, frozen: bool = False) -> Val
         if task_type == "grpo" and not bucket.get("verifiable", False):
             errors.append(f"GRPO bucket {bucket.get('name', index)} must be marked verifiable")
         if bucket.get("category") == "synthetic_reasoning" and float(share) > 0.05:
-            errors.append("synthetic_reasoning share exceeds the 5% cap encoded from AGENTS.md")
+            errors.append("synthetic_reasoning share exceeds the project 5% cap for the initial research baseline")
         if bucket.get("category") == "synthetic_reasoning" and not bucket.get("capped", False):
             warnings.append(
                 f"bucket {bucket.get('name', index)} is synthetic reasoning and should record a cap rationale"
@@ -143,4 +143,3 @@ def build_frozen_manifest(spec: dict[str, Any], *, source_path: str | Path | Non
         normalized_buckets.append(normalized_bucket)
     frozen_manifest["buckets"] = normalized_buckets
     return frozen_manifest
-

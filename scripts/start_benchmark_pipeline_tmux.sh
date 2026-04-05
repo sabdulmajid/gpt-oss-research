@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/pub7/neel2/gpt-oss-research"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SESSION="benchmark-pipeline"
 LOG_PATH="$ROOT/artifacts/logs/benchmark_pipeline_v1.log"
 PIPELINE="$ROOT/scripts/run_benchmark_pipeline.sh"

@@ -1,7 +1,7 @@
 experiment_name: gpt_oss_20b_grpo_pilot_v1
 model:
-  name_or_path: /pub7/neel2/hf-cache/gpt-oss-20b
-  teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+  name_or_path: ${GPT_OSS_20B_PATH:-openai/gpt-oss-20b}
+  teacher_model: ${GPT_OSS_120B_PATH:-openai/gpt-oss-120b}
   init_adapter_path: null
 model_load:
   note: Pilot GRPO remains after SFT benchmarking; this config points at a real materialized verifiable slice.
@@ -19,15 +19,15 @@ adapter:
       - "{layer}.mlp.experts.down_proj"
 data:
   manifest_path: data/manifests/grpo_starting_mix.manifest.json
-  materialized_dataset_path: /pub7/neel2/gpt-oss-research/artifacts/materialized/grpo_real_pilot_v1/train.jsonl
+  materialized_dataset_path: artifacts/materialized/grpo_real_pilot_v1/train.jsonl
 reward:
   type: mixed_verifiable
   tasks_root: eval/ml_research_eval/tasks
 output:
-  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/grpo/gpt_oss_20b_grpo_pilot_v1
-  report_dir: /pub7/neel2/gpt-oss-research/reports/experiments
+  output_dir: artifacts/checkpoints/grpo/gpt_oss_20b_grpo_pilot_v1
+  report_dir: reports/experiments
 training:
-  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/grpo/gpt_oss_20b_grpo_pilot_v1
+  output_dir: artifacts/checkpoints/grpo/gpt_oss_20b_grpo_pilot_v1
   learning_rate: 1.0e-6
   gradient_checkpointing: true
   per_device_train_batch_size: 1

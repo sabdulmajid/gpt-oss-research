@@ -11,7 +11,7 @@ bucket_summary:
   debugging_performance: 12
 reference_pass_rate: 1.0
 reference_failed: 0
-output_json: /pub7/neel2/gpt-oss-research/artifacts/eval/internal_eval_reference_51_v1.json
+output_json: artifacts/eval/internal_eval_reference_51_v1.json
 notes:
   - This is a reference-suite validation report, not a model benchmark result.
   - GPU-backed model reruns were blocked at report time by an NVIDIA driver outage on the node.
@@ -39,7 +39,7 @@ The current suite is intentionally bucketed so future reports can track whether 
 - `transformers_accelerate_fsdp_mixed_precision`: 13
 - `debugging_performance`: 12
 
-This is still below the long-term `200-500` task target in `AGENTS.md`, but it is large enough to stop treating the internal eval as a toy harness.
+This is still below the long-term `200-500` task target in [docs/project_strategy.md](../../docs/project_strategy.md), but it is large enough to stop treating the internal eval as a toy harness.
 
 # Validation
 

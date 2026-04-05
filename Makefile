@@ -1,4 +1,5 @@
 PYTHON ?= python
+MODEL_20B_PATH ?= openai/gpt-oss-20b
 
 .PHONY: manifests validate filter-sample split-sample internal-eval sft-dry-run grpo-dry-run smoke test materialize-sft materialize-grpo materialize-sft-benchmark materialize-grpo-benchmark model-eval benchmark-pipeline gpu-diagnose benchmark-start benchmark-status benchmark-tail
 
@@ -50,9 +51,9 @@ materialize-grpo-benchmark:
 
 model-eval:
 	$(PYTHON) scripts/run_model_eval.py \
-		--model-path /pub7/neel2/hf-cache/gpt-oss-20b \
+		--model-path $(MODEL_20B_PATH) \
 		--tasks-root eval/ml_research_eval/tasks \
-		--output /pub7/neel2/gpt-oss-research/artifacts/eval/internal_eval_base_report.json
+		--output artifacts/eval/internal_eval_base_report.json
 
 benchmark-pipeline:
 	bash scripts/run_benchmark_pipeline.sh

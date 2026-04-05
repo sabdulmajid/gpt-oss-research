@@ -1,9 +1,8 @@
 manifest_path: data/manifests/grpo_starting_mix.manifest.json
 task_type: grpo
 total_examples: 512
-output_dir: /pub7/neel2/gpt-oss-research/artifacts/materialized/grpo_benchmark_v1
+output_dir: artifacts/materialized/grpo_benchmark_v1
 max_files_per_source: 4
 pyarrow_batch_size: 128
 validation_fraction: 0.05
-hf_cache_dir: /pub7/neel2/hf-cache/hub
-
+hf_cache_dir: ${HF_CACHE_DIR:-~/.cache/huggingface/hub}

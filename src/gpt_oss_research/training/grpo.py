@@ -23,7 +23,7 @@ def build_grpo_plan(config_path: str | Path) -> TrainingPlan:
     if config["training"].get("use_vllm", False):
         warnings.append("use_vllm is enabled; verify GPU memory headroom before running on the 2x96 GB setup")
     else:
-        warnings.append("use_vllm is disabled; this matches the practical colocated/no-server default in AGENTS.md")
+        warnings.append("use_vllm is disabled; this matches the practical colocated/no-server default for the current benchmark configs")
     if init_adapter_path and not Path(init_adapter_path).exists():
         warnings.append("init_adapter_path is set but does not exist yet; GRPO should start from the best SFT adapter once it is available")
 

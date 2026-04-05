@@ -6,8 +6,8 @@ sft_config: configs/materialization/sft_benchmark_v1.yaml
 grpo_config: configs/materialization/grpo_benchmark_v1.yaml
 sft_manifest: data/manifests/sft_starting_mix.manifest.json
 grpo_manifest: data/manifests/grpo_starting_mix.manifest.json
-sft_resolved_manifest: /pub7/neel2/gpt-oss-research/artifacts/materialized/sft_benchmark_v1/resolved_manifest.json
-grpo_resolved_manifest: /pub7/neel2/gpt-oss-research/artifacts/materialized/grpo_benchmark_v1/resolved_manifest.json
+sft_resolved_manifest: artifacts/materialized/sft_benchmark_v1/resolved_manifest.json
+grpo_resolved_manifest: artifacts/materialized/grpo_benchmark_v1/resolved_manifest.json
 ---
 
 # Summary
@@ -42,7 +42,7 @@ The HF training-stack slice from filtered GitHub repos is still thin at `5` exam
 
 # GRPO Materialization Notes
 
-The GRPO slice is cleaner and fully verifiable, which is consistent with `AGENTS.md`.
+The GRPO slice is cleaner and fully verifiable, which is consistent with the project benchmark strategy.
 
 Realized source counts:
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import fnmatch
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterable
@@ -18,7 +19,7 @@ from .io import load_json, load_yaml, write_json, write_jsonl
 from .manifests import load_manifest_spec, validate_manifest_spec
 
 SYSTEM_PROMPT = "You are a precise ML research coding assistant."
-DEFAULT_HF_CACHE = "/pub7/neel2/hf-cache/hub"
+DEFAULT_HF_CACHE = os.environ.get("HF_CACHE_DIR") or str(Path.home() / ".cache" / "huggingface" / "hub")
 
 
 @dataclass(slots=True)

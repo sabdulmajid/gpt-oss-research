@@ -16,3 +16,6 @@ artifacts/**
 data/processed/
 data/cache/
 
+AGENTS.md
+generate_tasks.py
+test_model.py

@@ -2,7 +2,7 @@ experiment_name: ""
 date_utc: ""
 git_sha: ""
 base_model: "openai/gpt-oss-20b"
-teacher_model: "/pub7/neel2/hf-cache/gpt-oss-120b"
+teacher_model: "${GPT_OSS_120B_PATH:-openai/gpt-oss-120b}"
 adapter_strategy:
   type: lora
   rank:
@@ -26,4 +26,3 @@ metrics:
   codecontests_holdout:
   codeforces_holdout:
 notes: ""
-

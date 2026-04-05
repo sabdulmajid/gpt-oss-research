@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/pub7/neel2/gpt-oss-research"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+
+MODEL_20B_PATH="${GPT_OSS_20B_PATH:-openai/gpt-oss-20b}"
 
 TASKS_ROOT="$ROOT/eval/ml_research_eval/tasks"
 LOG_DIR="$ROOT/artifacts/logs"
@@ -54,7 +56,7 @@ wait_for_cuda
 run_if_missing_file \
   "$BASE_REPORT" \
   python scripts/run_model_eval.py \
-    --model-path /pub7/neel2/hf-cache/gpt-oss-20b \
+    --model-path "$MODEL_20B_PATH" \
     --tasks-root "$TASKS_ROOT" \
     --output "$BASE_REPORT" \
     --max-new-tokens 768
@@ -68,7 +70,7 @@ fi
 run_if_missing_file \
   "$SFT_REPORT" \
   python scripts/run_model_eval.py \
-    --model-path /pub7/neel2/hf-cache/gpt-oss-20b \
+    --model-path "$MODEL_20B_PATH" \
     --adapter-path "$SFT_OUTPUT_DIR" \
     --tasks-root "$TASKS_ROOT" \
     --output "$SFT_REPORT" \
@@ -83,7 +85,7 @@ fi
 run_if_missing_file \
   "$GRPO_REPORT" \
   python scripts/run_model_eval.py \
-    --model-path /pub7/neel2/hf-cache/gpt-oss-20b \
+    --model-path "$MODEL_20B_PATH" \
     --adapter-path "$GRPO_OUTPUT_DIR" \
     --tasks-root "$TASKS_ROOT" \
     --output "$GRPO_REPORT" \

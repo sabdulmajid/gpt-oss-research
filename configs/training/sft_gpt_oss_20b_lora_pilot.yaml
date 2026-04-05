@@ -1,7 +1,7 @@
 experiment_name: gpt_oss_20b_sft_pilot_v1
 model:
-  name_or_path: /pub7/neel2/hf-cache/gpt-oss-20b
-  teacher_model: /pub7/neel2/hf-cache/gpt-oss-120b
+  name_or_path: ${GPT_OSS_20B_PATH:-openai/gpt-oss-20b}
+  teacher_model: ${GPT_OSS_120B_PATH:-openai/gpt-oss-120b}
 model_load:
   quantization: mxfp4
   dequantize: true
@@ -23,12 +23,12 @@ adapter:
       - "{layer}.mlp.experts.down_proj"
 data:
   manifest_path: data/manifests/sft_starting_mix.manifest.json
-  materialized_dataset_path: /pub7/neel2/gpt-oss-research/artifacts/materialized/sft_real_pilot_v1/train.jsonl
+  materialized_dataset_path: artifacts/materialized/sft_real_pilot_v1/train.jsonl
 output:
-  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/sft/gpt_oss_20b_sft_pilot_v1
-  report_dir: /pub7/neel2/gpt-oss-research/reports/experiments
+  output_dir: artifacts/checkpoints/sft/gpt_oss_20b_sft_pilot_v1
+  report_dir: reports/experiments
 training:
-  output_dir: /pub7/neel2/gpt-oss-research/artifacts/checkpoints/sft/gpt_oss_20b_sft_pilot_v1
+  output_dir: artifacts/checkpoints/sft/gpt_oss_20b_sft_pilot_v1
   learning_rate: 2.0e-4
   gradient_checkpointing: true
   per_device_train_batch_size: 1
